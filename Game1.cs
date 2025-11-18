@@ -41,7 +41,7 @@ namespace Monogame_3___Animation
             _graphics.ApplyChanges();
 
             tribbleBrownRect = new Rectangle(0, 0, 100, 100);
-            tribbleBrownRectAlt = new Rectangle(-100, -100, 100, 100);
+            tribbleBrownRectAlt = new Rectangle(-1000, -1000, 100, 100);
             tribbleBrownSpeed = new Vector2(2, 1);
 
             tribbleTanRect = new Rectangle(generator.Next(1, 700), generator.Next(1, 500), 100, 100);
@@ -85,27 +85,22 @@ namespace Monogame_3___Animation
             tribbleBrownRect.X += (int)tribbleBrownSpeed.X;
             tribbleBrownRect.Y += (int)tribbleBrownSpeed.Y;
 
-            if (tribbleBrownRect.Right > window.Width || tribbleBrownRect.Left < 0)
+            if (tribbleBrownRect.Right == window.Width)
             {
                 tribbleBrownRectAlt.X = -100;
                 tribbleBrownRectAlt.Y = -100;
             }
 
-            if (tribbleBrownRect.Bottom > window.Height || tribbleBrownRect.Top < 0)
-            {
-                
-            }
-
             tribbleBrownRectAlt.X += (int)tribbleBrownSpeed.X;
             tribbleBrownRectAlt.Y += (int)tribbleBrownSpeed.Y;
 
-            if (tribbleBrownRectAlt.Right > window.Width || tribbleBrownRect.Left < 0)
+            if (tribbleBrownRectAlt.Right == window.Width)
             {
                 tribbleBrownRect.X = -100;
                 tribbleBrownRect.Y = -100;
             }
 
-                tribbleTanRect.X += (int)tribbleTanSpeed.X;
+            tribbleTanRect.X += (int)tribbleTanSpeed.X;
             tribbleTanRect.Y += (int)tribbleTanSpeed.Y;
 
             if (tribbleTanRect.Right > window.Width || tribbleTanRect.Left < 0)
@@ -230,15 +225,29 @@ namespace Monogame_3___Animation
             if (tribbleOrangeRect.Right > window.Width || tribbleOrangeRect.Left < 0)
             {
                 tribbleOrangeSpeed.X *= -1;
-;
-                tribbleOrangeSpeed.Y = (generator.Next(0, 21));
+
+                if (tribbleOrangeSpeed.Y < 0)
+                {
+                    tribbleOrangeSpeed.Y = (generator.Next(-20, 1));
+                }
+                else
+                {
+                    tribbleOrangeSpeed.Y = (generator.Next(0, 21));
+                }
             }
 
             if (tribbleOrangeRect.Bottom > window.Height || tribbleOrangeRect.Top < 0)
             {
                 tribbleOrangeSpeed.Y *= -1;
 
-                tribbleOrangeSpeed.X = (generator.Next(0, 21));
+                if (tribbleOrangeSpeed.X < 0)
+                {
+                    tribbleOrangeSpeed.X = (generator.Next(-20, 1));
+                }
+                else
+                {
+                    tribbleOrangeSpeed.X = (generator.Next(0, 21));
+                }
             }
             
 
