@@ -1,4 +1,5 @@
 ﻿using Microsoft.Xna.Framework;
+using Microsoft.Xna.Framework.Audio;
 using Microsoft.Xna.Framework.Graphics;
 using Microsoft.Xna.Framework.Input;
 using System;
@@ -75,6 +76,8 @@ namespace Monogame_3___Animation
             tribbleTanTexture = Content.Load<Texture2D>("TribbleTan");
             tribbleGreyTexture = Content.Load<Texture2D>("TribbleGrey");
             tribbleOrangeTexture = Content.Load<Texture2D>("TribbleOrange");
+
+            tribbleCoo = Content.Load<SoundEffect>("tribble_coo");
         }
 
         protected override void Update(GameTime gameTime)
@@ -91,6 +94,8 @@ namespace Monogame_3___Animation
             {
                 tribbleBrownRectAlt.X = -100;
                 tribbleBrownRectAlt.Y = -100;
+
+                tribbleCoo.Play();
             }
 
             tribbleBrownRectAlt.X += (int)tribbleBrownSpeed.X;
@@ -100,6 +105,8 @@ namespace Monogame_3___Animation
             {
                 tribbleBrownRect.X = -100;
                 tribbleBrownRect.Y = -100;
+
+                tribbleCoo.Play();
             }
 
             tribbleTanRect.X += (int)tribbleTanSpeed.X;
@@ -109,7 +116,10 @@ namespace Monogame_3___Animation
             {
                 tribbleTanSpeed.X *= -1;
 
+                tribbleCoo.Play();
+
                 backgroundColorNumber++;
+
                 if (backgroundColorNumber == 1)
                 {
                     backgroundColor = Color.LightCoral;
@@ -140,9 +150,11 @@ namespace Monogame_3___Animation
             if (tribbleTanRect.Bottom > window.Height || tribbleTanRect.Top < 0)
             {
                 tribbleTanSpeed.Y *= -1;
-                GraphicsDevice.Clear(backgroundColor);
+
+                tribbleCoo.Play();
 
                 backgroundColorNumber++;
+
                 if (backgroundColorNumber == 1)
                 {
                     backgroundColor = Color.LightCoral;
@@ -195,6 +207,8 @@ namespace Monogame_3___Animation
                 {
                     tribbleGreyTexture = Content.Load<Texture2D>("TribbleGreyVerticalFlip");
                 }
+
+                tribbleCoo.Play();
             }
 
             if (tribbleGreyRect.Bottom > window.Height || tribbleGreyRect.Top < 0)
@@ -219,6 +233,8 @@ namespace Monogame_3___Animation
                 {
                     tribbleGreyTexture = Content.Load<Texture2D>("TribbleGreyVerticalFlip");
                 }
+
+                tribbleCoo.Play();
             }
 
             tribbleOrangeRect.X += (int)tribbleOrangeSpeed.X;
@@ -236,6 +252,8 @@ namespace Monogame_3___Animation
                 {
                     tribbleOrangeSpeed.Y = (generator.Next(0, 21));
                 }
+
+                tribbleCoo.Play();
             }
 
             if (tribbleOrangeRect.Bottom > window.Height || tribbleOrangeRect.Top < 0)
@@ -250,6 +268,8 @@ namespace Monogame_3___Animation
                 {
                     tribbleOrangeSpeed.X = (generator.Next(0, 21));
                 }
+
+                tribbleCoo.Play();
             }
             
 
