@@ -24,6 +24,8 @@ namespace Monogame_3___Animation
 
         Color backgroundColor;
 
+        SoundEffect tribbleCoo;
+
         public Game1()
         {
             _graphics = new GraphicsDeviceManager(this);

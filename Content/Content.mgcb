@@ -25,6 +25,9 @@
 /processorParam:TextureFormat=Color
 /build:TibbleBrown.png
 
+#begin tribble_coo.wav
+/copy:tribble_coo.wav
+
 #begin TribbleGrey.png
 /importer:TextureImporter
 /processor:TextureProcessor
