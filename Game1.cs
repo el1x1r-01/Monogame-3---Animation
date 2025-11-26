@@ -13,19 +13,29 @@ namespace Monogame_3___Animation
 
         Random generator = new Random();
 
-        Rectangle window, tribbleBrownRect, tribbleTanRect, tribbleGreyRect, tribbleOrangeRect, tribbleBrownRectAlt;
+        Rectangle window, tribbleBrownRect, tribbleTanRect, tribbleGreyRect, tribbleOrangeRect, tribbleBrownRectAlt, quitRect;
 
-        Texture2D tribbleBrownTexture, tribbleTanTexture, tribbleGreyTexture, tribbleOrangeTexture;
+        Texture2D tribbleBrownTexture, tribbleTanTexture, tribbleGreyTexture, tribbleOrangeTexture, tribbleIntroTexture, quitTexture;
 
         Vector2 tribbleBrownSpeed, tribbleTanSpeed, tribbleGreySpeed, tribbleOrangeSpeed;
 
         int backgroundColorNumber, tribbleGreyHorizontalFlip, tribbleGreyVerticalFlip;
 
-        SpriteEffects greyTribbleFlip;
-
-        Color backgroundColor;
+        Color backgroundColor, quitColor;
 
         SoundEffect tribbleCoo;
+
+        enum Screen
+        {
+            Intro,
+            TribbleYard
+        }
+
+        Screen screen;
+
+        MouseState mouseState;
+
+        SpriteFont titleFont, instructionsFont;
 
         public Game1()
         {
@@ -58,10 +68,10 @@ namespace Monogame_3___Animation
 
             tribbleGreyHorizontalFlip = 1;
             tribbleGreyVerticalFlip = 1;
-            if (tribbleGreySpeed.Y > 0)
-                greyTribbleFlip = SpriteEffects.FlipVertically;
-            else
-                greyTribbleFlip = SpriteEffects.None;
+
+            screen = Screen.Intro;
+
+            quitRect = new Rectangle(700, 10, 90, 40);
 
             base.Initialize();
         }
@@ -78,6 +88,13 @@ namespace Monogame_3___Animation
             tribbleOrangeTexture = Content.Load<Texture2D>("TribbleOrange");
 
             tribbleCoo = Content.Load<SoundEffect>("tribble_coo");
+
+            tribbleIntroTexture = Content.Load<Texture2D>("tribble_intro");
+
+            titleFont = Content.Load<SpriteFont>("TitleFont");
+            instructionsFont = Content.Load<SpriteFont>("InstructionsFont");
+
+            quitTexture = Content.Load<Texture2D>("Quit button");
         }
 
         protected override void Update(GameTime gameTime)
@@ -87,191 +104,218 @@ namespace Monogame_3___Animation
 
             // TODO: Add your update logic here
 
-            tribbleBrownRect.X += (int)tribbleBrownSpeed.X;
-            tribbleBrownRect.Y += (int)tribbleBrownSpeed.Y;
+            mouseState = Mouse.GetState();
 
-            if (tribbleBrownRect.Right == window.Width)
+            if (screen == Screen.Intro)
             {
-                tribbleBrownRectAlt.X = -100;
-                tribbleBrownRectAlt.Y = -100;
-
-                tribbleCoo.Play();
+                if (mouseState.LeftButton == ButtonState.Pressed)
+                    screen = Screen.TribbleYard;
             }
 
-            tribbleBrownRectAlt.X += (int)tribbleBrownSpeed.X;
-            tribbleBrownRectAlt.Y += (int)tribbleBrownSpeed.Y;
-
-            if (tribbleBrownRectAlt.Right == window.Width)
+            else if (screen == Screen.TribbleYard)
             {
-                tribbleBrownRect.X = -100;
-                tribbleBrownRect.Y = -100;
+                tribbleBrownRect.X += (int)tribbleBrownSpeed.X;
+                tribbleBrownRect.Y += (int)tribbleBrownSpeed.Y;
 
-                tribbleCoo.Play();
-            }
+                if (tribbleBrownRect.Right == window.Width)
+                {
+                    tribbleBrownRectAlt.X = -100;
+                    tribbleBrownRectAlt.Y = -100;
 
-            tribbleTanRect.X += (int)tribbleTanSpeed.X;
-            tribbleTanRect.Y += (int)tribbleTanSpeed.Y;
-
-            if (tribbleTanRect.Right > window.Width || tribbleTanRect.Left < 0)
-            {
-                tribbleTanSpeed.X *= -1;
-
-                tribbleCoo.Play();
-
-                backgroundColorNumber++;
-
-                if (backgroundColorNumber == 1)
-                {
-                    backgroundColor = Color.LightCoral;
-                }
-                else if (backgroundColorNumber == 2)
-                {
-                    backgroundColor = Color.LightSalmon;
-                }
-                else if (backgroundColorNumber == 3)
-                {
-                    backgroundColor = new Color(244, 249, 126);
-                }
-                else if (backgroundColorNumber == 4)
-                {
-                    backgroundColor = Color.LightGreen;
-                }
-                else if (backgroundColorNumber == 5)
-                {
-                    backgroundColor = Color.CornflowerBlue;
-                }
-                else if (backgroundColorNumber == 6)
-                {
-                    backgroundColor = Color.Plum;
-                    backgroundColorNumber = 0;
-                }
-            }
-
-            if (tribbleTanRect.Bottom > window.Height || tribbleTanRect.Top < 0)
-            {
-                tribbleTanSpeed.Y *= -1;
-
-                tribbleCoo.Play();
-
-                backgroundColorNumber++;
-
-                if (backgroundColorNumber == 1)
-                {
-                    backgroundColor = Color.LightCoral;
-                }
-                else if (backgroundColorNumber == 2)
-                {
-                    backgroundColor = Color.LightSalmon;
-                }
-                else if (backgroundColorNumber == 3)
-                {
-                    backgroundColor = new Color(244, 249, 126);
-                }
-                else if (backgroundColorNumber == 4)
-                {
-                    backgroundColor = Color.LightGreen;
-                }
-                else if (backgroundColorNumber == 5)
-                {
-                    backgroundColor = Color.CornflowerBlue;
-                }
-                else if (backgroundColorNumber == 6)
-                {
-                    backgroundColor = Color.Plum;
-                    backgroundColorNumber = 0;
-                }
-            }
-
-            tribbleGreyRect.X += (int)tribbleGreySpeed.X;
-            tribbleGreyRect.Y += (int)tribbleGreySpeed.Y;
-
-            if (tribbleGreyRect.Right > window.Width || tribbleGreyRect.Left < 0)
-            {
-                tribbleGreySpeed.X *= -1;
-
-                tribbleGreyHorizontalFlip *= -1;
-
-                if (tribbleGreyHorizontalFlip == -1 && tribbleGreyVerticalFlip == -1)
-                {
-                    tribbleGreyTexture = Content.Load<Texture2D>("TribbleGrey");
-                }
-                else if (tribbleGreyHorizontalFlip == 1 && tribbleGreyVerticalFlip == -1)
-                {
-                    tribbleGreyTexture = Content.Load<Texture2D>("TribbleGreyHorizontalFlip");
-                }
-                else if (tribbleGreyHorizontalFlip == 1 && tribbleGreyVerticalFlip == 1)
-                {
-                    tribbleGreyTexture = Content.Load<Texture2D>("TribbleGreyFlipped");
-                }
-                else if (tribbleGreyHorizontalFlip == -1 && tribbleGreyVerticalFlip == 1)
-                {
-                    tribbleGreyTexture = Content.Load<Texture2D>("TribbleGreyVerticalFlip");
+                    tribbleCoo.Play();
                 }
 
-                tribbleCoo.Play();
-            }
+                tribbleBrownRectAlt.X += (int)tribbleBrownSpeed.X;
+                tribbleBrownRectAlt.Y += (int)tribbleBrownSpeed.Y;
 
-            if (tribbleGreyRect.Bottom > window.Height || tribbleGreyRect.Top < 0)
-            {
-                tribbleGreySpeed.Y *= -1;
+                if (tribbleBrownRectAlt.Right == window.Width)
+                {
+                    tribbleBrownRect.X = -100;
+                    tribbleBrownRect.Y = -100;
 
-                tribbleGreyVerticalFlip *= -1;
-
-                if (tribbleGreyHorizontalFlip == -1 && tribbleGreyVerticalFlip == -1)
-                {
-                    tribbleGreyTexture = Content.Load<Texture2D>("TribbleGrey");
-                }
-                else if (tribbleGreyHorizontalFlip == 1 && tribbleGreyVerticalFlip == -1)
-                {
-                    tribbleGreyTexture = Content.Load<Texture2D>("TribbleGreyHorizontalFlip");
-                }
-                else if (tribbleGreyHorizontalFlip == 1 && tribbleGreyVerticalFlip == 1)
-                {
-                    tribbleGreyTexture = Content.Load<Texture2D>("TribbleGreyFlipped");
-                }
-                else if (tribbleGreyHorizontalFlip == -1 && tribbleGreyVerticalFlip == 1)
-                {
-                    tribbleGreyTexture = Content.Load<Texture2D>("TribbleGreyVerticalFlip");
+                    tribbleCoo.Play();
                 }
 
-                tribbleCoo.Play();
-            }
+                tribbleTanRect.X += (int)tribbleTanSpeed.X;
+                tribbleTanRect.Y += (int)tribbleTanSpeed.Y;
 
-            tribbleOrangeRect.X += (int)tribbleOrangeSpeed.X;
-            tribbleOrangeRect.Y += (int)tribbleOrangeSpeed.Y;
-
-            if (tribbleOrangeRect.Right > window.Width || tribbleOrangeRect.Left < 0)
-            {
-                tribbleOrangeSpeed.X *= -1;
-
-                if (tribbleOrangeSpeed.Y < 0)
+                if (tribbleTanRect.Right > window.Width || tribbleTanRect.Left < 0)
                 {
-                    tribbleOrangeSpeed.Y = (generator.Next(-20, 1));
+                    tribbleTanSpeed.X *= -1;
+
+                    tribbleCoo.Play();
+
+                    backgroundColorNumber++;
+
+                    if (backgroundColorNumber == 1)
+                    {
+                        backgroundColor = Color.LightCoral;
+                    }
+                    else if (backgroundColorNumber == 2)
+                    {
+                        backgroundColor = Color.LightSalmon;
+                    }
+                    else if (backgroundColorNumber == 3)
+                    {
+                        backgroundColor = new Color(244, 249, 126);
+                    }
+                    else if (backgroundColorNumber == 4)
+                    {
+                        backgroundColor = Color.LightGreen;
+                    }
+                    else if (backgroundColorNumber == 5)
+                    {
+                        backgroundColor = Color.CornflowerBlue;
+                    }
+                    else if (backgroundColorNumber == 6)
+                    {
+                        backgroundColor = Color.Plum;
+                        backgroundColorNumber = 0;
+                    }
+                }
+
+                if (tribbleTanRect.Bottom > window.Height || tribbleTanRect.Top < 0)
+                {
+                    tribbleTanSpeed.Y *= -1;
+
+                    tribbleCoo.Play();
+
+                    backgroundColorNumber++;
+
+                    if (backgroundColorNumber == 1)
+                    {
+                        backgroundColor = Color.LightCoral;
+                    }
+                    else if (backgroundColorNumber == 2)
+                    {
+                        backgroundColor = Color.LightSalmon;
+                    }
+                    else if (backgroundColorNumber == 3)
+                    {
+                        backgroundColor = new Color(244, 249, 126);
+                    }
+                    else if (backgroundColorNumber == 4)
+                    {
+                        backgroundColor = Color.LightGreen;
+                    }
+                    else if (backgroundColorNumber == 5)
+                    {
+                        backgroundColor = Color.CornflowerBlue;
+                    }
+                    else if (backgroundColorNumber == 6)
+                    {
+                        backgroundColor = Color.Plum;
+                        backgroundColorNumber = 0;
+                    }
+                }
+
+                tribbleGreyRect.X += (int)tribbleGreySpeed.X;
+                tribbleGreyRect.Y += (int)tribbleGreySpeed.Y;
+
+                if (tribbleGreyRect.Right > window.Width || tribbleGreyRect.Left < 0)
+                {
+                    tribbleGreySpeed.X *= -1;
+
+                    tribbleGreyHorizontalFlip *= -1;
+
+                    if (tribbleGreyHorizontalFlip == -1 && tribbleGreyVerticalFlip == -1)
+                    {
+                        tribbleGreyTexture = Content.Load<Texture2D>("TribbleGrey");
+                    }
+                    else if (tribbleGreyHorizontalFlip == 1 && tribbleGreyVerticalFlip == -1)
+                    {
+                        tribbleGreyTexture = Content.Load<Texture2D>("TribbleGreyHorizontalFlip");
+                    }
+                    else if (tribbleGreyHorizontalFlip == 1 && tribbleGreyVerticalFlip == 1)
+                    {
+                        tribbleGreyTexture = Content.Load<Texture2D>("TribbleGreyFlipped");
+                    }
+                    else if (tribbleGreyHorizontalFlip == -1 && tribbleGreyVerticalFlip == 1)
+                    {
+                        tribbleGreyTexture = Content.Load<Texture2D>("TribbleGreyVerticalFlip");
+                    }
+
+                    tribbleCoo.Play();
+                }
+
+                if (tribbleGreyRect.Bottom > window.Height || tribbleGreyRect.Top < 0)
+                {
+                    tribbleGreySpeed.Y *= -1;
+
+                    tribbleGreyVerticalFlip *= -1;
+
+                    if (tribbleGreyHorizontalFlip == -1 && tribbleGreyVerticalFlip == -1)
+                    {
+                        tribbleGreyTexture = Content.Load<Texture2D>("TribbleGrey");
+                    }
+                    else if (tribbleGreyHorizontalFlip == 1 && tribbleGreyVerticalFlip == -1)
+                    {
+                        tribbleGreyTexture = Content.Load<Texture2D>("TribbleGreyHorizontalFlip");
+                    }
+                    else if (tribbleGreyHorizontalFlip == 1 && tribbleGreyVerticalFlip == 1)
+                    {
+                        tribbleGreyTexture = Content.Load<Texture2D>("TribbleGreyFlipped");
+                    }
+                    else if (tribbleGreyHorizontalFlip == -1 && tribbleGreyVerticalFlip == 1)
+                    {
+                        tribbleGreyTexture = Content.Load<Texture2D>("TribbleGreyVerticalFlip");
+                    }
+
+                    tribbleCoo.Play();
+                }
+
+                tribbleOrangeRect.X += (int)tribbleOrangeSpeed.X;
+                tribbleOrangeRect.Y += (int)tribbleOrangeSpeed.Y;
+
+                if (tribbleOrangeRect.Right > window.Width || tribbleOrangeRect.Left < 0)
+                {
+                    tribbleOrangeSpeed.X *= -1;
+
+                    if (tribbleOrangeSpeed.Y < 0)
+                    {
+                        tribbleOrangeSpeed.Y = (generator.Next(-20, 1));
+                    }
+                    else
+                    {
+                        tribbleOrangeSpeed.Y = (generator.Next(0, 21));
+                    }
+
+                    tribbleCoo.Play();
+                }
+
+                if (tribbleOrangeRect.Bottom > window.Height || tribbleOrangeRect.Top < 0)
+                {
+                    tribbleOrangeSpeed.Y *= -1;
+
+                    if (tribbleOrangeSpeed.X < 0)
+                    {
+                        tribbleOrangeSpeed.X = (generator.Next(-20, 1));
+                    }
+                    else
+                    {
+                        tribbleOrangeSpeed.X = (generator.Next(0, 21));
+                    }
+
+                    tribbleCoo.Play();
+                }
+
+                if (quitRect.Contains(mouseState.Position))
+                {
+                    quitColor = Color.Green;
                 }
                 else
                 {
-                    tribbleOrangeSpeed.Y = (generator.Next(0, 21));
+                    quitColor = Color.White;
                 }
 
-                tribbleCoo.Play();
-            }
-
-            if (tribbleOrangeRect.Bottom > window.Height || tribbleOrangeRect.Top < 0)
-            {
-                tribbleOrangeSpeed.Y *= -1;
-
-                if (tribbleOrangeSpeed.X < 0)
+                if (mouseState.LeftButton == ButtonState.Pressed)
                 {
-                    tribbleOrangeSpeed.X = (generator.Next(-20, 1));
+                    if (quitRect.Contains(mouseState.Position))
+                    {
+                        Exit();
+                    }
                 }
-                else
-                {
-                    tribbleOrangeSpeed.X = (generator.Next(0, 21));
-                }
-
-                tribbleCoo.Play();
-            }
-            
+            }           
 
             base.Update(gameTime);
         }
@@ -284,12 +328,24 @@ namespace Monogame_3___Animation
 
             _spriteBatch.Begin();
 
-            _spriteBatch.Draw(tribbleBrownTexture, tribbleBrownRect, Color.White);
-            _spriteBatch.Draw(tribbleTanTexture, tribbleTanRect, Color.White);
-            _spriteBatch.Draw(tribbleGreyTexture, tribbleGreyRect, Color.White);
-            _spriteBatch.Draw(tribbleOrangeTexture, tribbleOrangeRect, Color.White);
+            if (screen == Screen.Intro)
+            {
+                _spriteBatch.Draw(tribbleIntroTexture, new Rectangle(0, 50, 800, 500), Color.White);
 
-            _spriteBatch.Draw(tribbleBrownTexture, tribbleBrownRectAlt, Color.White);
+                _spriteBatch.DrawString(titleFont, "The Tribble Yard", new Vector2(230, 0), Color.White);
+                _spriteBatch.DrawString(instructionsFont, "Click to continue...", new Vector2(325, 565), Color.White);
+            }
+            else if (screen == Screen.TribbleYard)
+            {
+                _spriteBatch.Draw(tribbleBrownTexture, tribbleBrownRect, Color.White);
+                _spriteBatch.Draw(tribbleTanTexture, tribbleTanRect, Color.White);
+                _spriteBatch.Draw(tribbleGreyTexture, tribbleGreyRect, Color.White);
+                _spriteBatch.Draw(tribbleOrangeTexture, tribbleOrangeRect, Color.White);
+
+                _spriteBatch.Draw(tribbleBrownTexture, tribbleBrownRectAlt, Color.White);
+
+                _spriteBatch.Draw(quitTexture, quitRect, quitColor);
+            }
 
             _spriteBatch.End();
 

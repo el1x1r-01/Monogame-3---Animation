@@ -13,6 +13,25 @@
 
 #---------------------------------- Content ---------------------------------#
 
+#begin InstructionsFont.spritefont
+/importer:FontDescriptionImporter
+/processor:FontDescriptionProcessor
+/processorParam:PremultiplyAlpha=True
+/processorParam:TextureFormat=Compressed
+/build:InstructionsFont.spritefont
+
+#begin Quit button.png
+/importer:TextureImporter
+/processor:TextureProcessor
+/processorParam:ColorKeyColor=255,0,255,255
+/processorParam:ColorKeyEnabled=True
+/processorParam:GenerateMipmaps=False
+/processorParam:PremultiplyAlpha=True
+/processorParam:ResizeToPowerOfTwo=False
+/processorParam:MakeSquare=False
+/processorParam:TextureFormat=Color
+/build:Quit button.png
+
 #begin TibbleBrown.png
 /importer:TextureImporter
 /processor:TextureProcessor
@@ -25,10 +44,30 @@
 /processorParam:TextureFormat=Color
 /build:TibbleBrown.png
 
+#begin TitleFont.spritefont
+/importer:FontDescriptionImporter
+/processor:FontDescriptionProcessor
+/processorParam:PremultiplyAlpha=True
+/processorParam:TextureFormat=Compressed
+/build:TitleFont.spritefont
+
 #begin tribble_coo.wav
-/importer:
-/processor:
+/importer:WavImporter
+/processor:SoundEffectProcessor
+/processorParam:Quality=Best
 /build:tribble_coo.wav
+
+#begin tribble_intro.jpg
+/importer:TextureImporter
+/processor:TextureProcessor
+/processorParam:ColorKeyColor=255,0,255,255
+/processorParam:ColorKeyEnabled=True
+/processorParam:GenerateMipmaps=False
+/processorParam:PremultiplyAlpha=True
+/processorParam:ResizeToPowerOfTwo=False
+/processorParam:MakeSquare=False
+/processorParam:TextureFormat=Color
+/build:tribble_intro.jpg
 
 #begin TribbleGrey.png
 /importer:TextureImporter
