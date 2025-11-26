@@ -3,6 +3,7 @@ using Microsoft.Xna.Framework.Audio;
 using Microsoft.Xna.Framework.Graphics;
 using Microsoft.Xna.Framework.Input;
 using System;
+using System.Collections.Generic;
 
 namespace Monogame_3___Animation
 {
@@ -13,9 +14,9 @@ namespace Monogame_3___Animation
 
         Random generator = new Random();
 
-        Rectangle window, tribbleBrownRect, tribbleTanRect, tribbleGreyRect, tribbleOrangeRect, tribbleBrownRectAlt, quitRect;
+        Rectangle window, tribbleBrownRect, tribbleTanRect, tribbleGreyRect, tribbleOrangeRect, tribbleBrownRectAlt, quitRect, tempTribble;
 
-        Texture2D tribbleBrownTexture, tribbleTanTexture, tribbleGreyTexture, tribbleOrangeTexture, tribbleIntroTexture, quitTexture;
+        Texture2D tribbleBrownTexture, tribbleTanTexture, tribbleGreyTexture, tribbleOrangeTexture, tribbleIntroTexture, quitTexture, tribblesColorTexture;
 
         Vector2 tribbleBrownSpeed, tribbleTanSpeed, tribbleGreySpeed, tribbleOrangeSpeed;
 
@@ -28,7 +29,8 @@ namespace Monogame_3___Animation
         enum Screen
         {
             Intro,
-            TribbleYard
+            TribbleYard,
+            EndScreen
         }
 
         Screen screen;
@@ -36,6 +38,10 @@ namespace Monogame_3___Animation
         MouseState mouseState;
 
         SpriteFont titleFont, instructionsFont;
+
+        List<Rectangle> tribbles;
+
+        List<int> tribblesColor;
 
         public Game1()
         {
@@ -72,6 +78,17 @@ namespace Monogame_3___Animation
             screen = Screen.Intro;
 
             quitRect = new Rectangle(700, 10, 90, 40);
+
+            tribbles = new List<Rectangle>();
+            tribblesColor = new List<int>();
+
+            for (int i = 0; i < 500; i++)
+            {
+                tempTribble = new Rectangle(generator.Next(-100, 800), generator.Next(-100, 600), 100, 100);
+                tribbles.Add(tempTribble);
+
+                tribblesColor.Add(generator.Next(1, 5));
+            }
 
             base.Initialize();
         }
@@ -312,10 +329,17 @@ namespace Monogame_3___Animation
                 {
                     if (quitRect.Contains(mouseState.Position))
                     {
-                        Exit();
+                        screen = Screen.EndScreen;
                     }
                 }
-            }           
+            }
+
+            if (screen == Screen.EndScreen)
+            {
+                
+
+                //Exit();
+            }
 
             base.Update(gameTime);
         }
@@ -345,6 +369,28 @@ namespace Monogame_3___Animation
                 _spriteBatch.Draw(tribbleBrownTexture, tribbleBrownRectAlt, Color.White);
 
                 _spriteBatch.Draw(quitTexture, quitRect, quitColor);
+            }
+            else if (screen == Screen.EndScreen)
+            {
+                foreach (Rectangle tribble in tribbles)
+                {
+                    if (tribblesColor[tribbles.IndexOf(tribble)] == 1)
+                    {
+                        _spriteBatch.Draw(tribbleBrownTexture, tribble, Color.White);
+                    }
+                    else if (tribblesColor[tribbles.IndexOf(tribble)] == 2)
+                    {
+                        _spriteBatch.Draw(tribbleTanTexture, tribble, Color.White);
+                    }
+                    else if (tribblesColor[tribbles.IndexOf(tribble)] == 3)
+                    {
+                        _spriteBatch.Draw(tribbleGreyTexture, tribble, Color.White);
+                    }
+                    else if (tribblesColor[tribbles.IndexOf(tribble)] == 4)
+                    {
+                        _spriteBatch.Draw(tribbleOrangeTexture, tribble, Color.White);
+                    }
+                }
             }
 
             _spriteBatch.End();
