@@ -24,7 +24,7 @@ namespace Monogame_3___Animation
 
         Color backgroundColor, quitColor;
 
-        SoundEffect tribbleCoo;
+        SoundEffect tribbleCoo, introMusicEffect;
 
         enum Screen
         {
@@ -42,6 +42,12 @@ namespace Monogame_3___Animation
         List<Rectangle> tribbles;
 
         List<int> tribblesColor;
+
+        SoundEffectInstance introMusic;
+
+        float seconds;
+
+        string exitCountdown;
 
         public Game1()
         {
@@ -105,6 +111,8 @@ namespace Monogame_3___Animation
             tribbleOrangeTexture = Content.Load<Texture2D>("TribbleOrange");
 
             tribbleCoo = Content.Load<SoundEffect>("tribble_coo");
+            introMusicEffect = Content.Load<SoundEffect>("Star Trek Original Series Main Title");
+            introMusic = introMusicEffect.CreateInstance();
 
             tribbleIntroTexture = Content.Load<Texture2D>("tribble_intro");
 
@@ -122,15 +130,20 @@ namespace Monogame_3___Animation
             // TODO: Add your update logic here
 
             mouseState = Mouse.GetState();
+            seconds += (float)gameTime.ElapsedGameTime.TotalSeconds;
 
             if (screen == Screen.Intro)
             {
+                introMusic.Play();
+
                 if (mouseState.LeftButton == ButtonState.Pressed)
                     screen = Screen.TribbleYard;
             }
 
             else if (screen == Screen.TribbleYard)
             {
+                introMusic.Stop();
+
                 tribbleBrownRect.X += (int)tribbleBrownSpeed.X;
                 tribbleBrownRect.Y += (int)tribbleBrownSpeed.Y;
 
@@ -329,6 +342,7 @@ namespace Monogame_3___Animation
                 {
                     if (quitRect.Contains(mouseState.Position))
                     {
+                        seconds = 0f;
                         screen = Screen.EndScreen;
                     }
                 }
@@ -336,9 +350,12 @@ namespace Monogame_3___Animation
 
             if (screen == Screen.EndScreen)
             {
-                
+                exitCountdown = "Exiting in " + (10 - (int)seconds).ToString() + " seconds...";
 
-                //Exit();
+                if (seconds >= 10f)
+                {
+                    Exit();
+                }
             }
 
             base.Update(gameTime);
@@ -391,6 +408,10 @@ namespace Monogame_3___Animation
                         _spriteBatch.Draw(tribbleOrangeTexture, tribble, Color.White);
                     }
                 }
+
+                _spriteBatch.DrawString(titleFont, "Thanks for visiting the Tribble Yard!", new Vector2(35, 250), Color.White);
+
+                _spriteBatch.DrawString(instructionsFont, exitCountdown, new Vector2(325, 350), Color.White);
             }
 
             _spriteBatch.End();

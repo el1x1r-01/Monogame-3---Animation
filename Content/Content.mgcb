@@ -32,6 +32,12 @@
 /processorParam:TextureFormat=Color
 /build:Quit button.png
 
+#begin Star Trek Original Series Main Title.wav
+/importer:WavImporter
+/processor:SoundEffectProcessor
+/processorParam:Quality=Best
+/build:Star Trek Original Series Main Title.wav
+
 #begin TibbleBrown.png
 /importer:TextureImporter
 /processor:TextureProcessor
